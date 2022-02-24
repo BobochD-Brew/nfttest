@@ -1,4 +1,4 @@
-let size = 1000
+let size;
 let roots;
 let colors;
 let pos = 1;
@@ -113,6 +113,7 @@ function closest(x){
   return(index);
 }
 function setup(){
+  size = windowWidth
   roots = [
   createVector(-100,0),
   createVector(100*cos(TWO_PI/6),100*sin(TWO_PI/6)),
