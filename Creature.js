@@ -123,7 +123,7 @@ class Creature {
             if(distance == 0 || distance == null || distance > this.range) continue;
             let vec = createVector(vegetals[i].position.x - this.position.x, vegetal.position.y - this.position.y)
 	    let a = (blue(this.color) < 100 && blue(vegetal.color) >= 100);
-	    let b = a || ((green(this.color) < 100 || red(this.color) < 150 ) && green(vegetal.color) >= 100);
+	    let b = a || ((green(this.color) < 100 && red(this.color) < 150 ) && green(vegetal.color) >= 100);
 	
             if(!b && (min(this.food,this.sex,this.food) > 20 || (this.food <= this.sex && this.food <= this.thirst))) vectorList.push(vec.normalize().mult(vegetal.attraction*random(1, 1.2)*green(this.color)/red(this.color) * (100 - this.food) / (1 + distance)));
             if (distance <= this.size) {
@@ -153,7 +153,7 @@ class Creature {
 			  let vec = createVector(waterspots[i].x - this.position.x, waterspots[i].y - this.position.y)
 			  vectorList.push(vec.normalize().mult((100 - this.thirst) / (1+distance)));
 			  if (distance <= this.size) {
-				  this.thirst = ((this.thirst + 0.5) > 100 ? 100 : this.thirst + 0.5);
+				  this.thirst = ((this.thirst + 1.5) > 100 ? 100 : this.thirst + 1.5);
 			  }
 			}
 		let maxL = createVector(0,0);
@@ -177,7 +177,7 @@ class Creature {
         }
 		if(count == 50) this.health -= 0.1;
 		count = 0;
-        while (blue(water.get(this.position.x, this.position.y)) < 100 && (green(this.color) < 100 || red(this.color) < 150) && count < 50) {
+        while (blue(water.get(this.position.x, this.position.y)) < 100 && (green(this.color) < 100 && red(this.color) < 150) && count < 50) {
             this.position = this.position.sub(maxL);
             let angle = createVector(1, 0).angleBetween(maxL)
             angle += change? 0.2 : -0.2;
