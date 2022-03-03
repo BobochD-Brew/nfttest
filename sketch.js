@@ -11,7 +11,7 @@ var waterSpots = [];
 const noiseScale = 250;
 const vegetalsNum = 250;
 const creatureNum = 30;
-const qualitySize = 3;
+const qualitySize = 5;
 
 var selected = null;
 
@@ -96,11 +96,11 @@ function setLayers() {
 				waterLayer.fill(lerpColor(waterColor2,waterColor,noise(i / noiseScale, j / noiseScale, 0)/limit));//*(3/limit)-(limit * 2 / 3)));
                 
                 waterLayer.circle(i, j, 1)
-                if(i % qualitySize == 0 || j % qualitySize == 0) if ((noise((i + 1) / noiseScale, j / noiseScale, 0) > limit) ||
+                if(i % qualitySize == 0 && j % qualitySize == 0) /*if ((noise((i + 1) / noiseScale, j / noiseScale, 0) > limit) ||
                     (noise(i / noiseScale, (j + 1) / noiseScale, 0) > limit) ||
                     (noise((i - 1) / noiseScale, j / noiseScale, 0) > limit) ||
                     (noise(i / noiseScale, (j - 1) / noiseScale, 0) > limit)
-                )
+                )*/
                     waterSpots.push(createVector(i, j))
             } else if (noise(i / noiseScale, j / noiseScale, 0) <= limit + 0.01) {
                 backgroundLayer.fill(lerpColor(groundColor, waterColor, 0.5));
