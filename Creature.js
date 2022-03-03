@@ -85,7 +85,7 @@ class Creature {
                         creatures.push(new Creature(this.position.x, this.position.y, (this.size+creature.size)/2))
                         creatures[creatures.length - 1].color = color((red(creatures[i].color) + red(this.color)) / 2, (green(creature.color) + green(this.color)) / 2, (blue(creature.color) + blue(this.color)) / 2)
                         creatures[creatures.length - 1].sizecount = int((this.sizecount + creature.sizecount)/2);
-						if (random(0, 1) < 0.05){
+						if (random(0, 1) < 0.09){
 							let r,g,b;
 							r = random(0,250);
 							g = random(0,(250-r*(2/3)))
@@ -122,8 +122,8 @@ class Creature {
             let distance = this.position.dist(vegetal.position);
             if(distance == 0 || distance == null || distance > this.range) continue;
             let vec = createVector(vegetals[i].position.x - this.position.x, vegetal.position.y - this.position.y)
-			if(blue(this.color) < 150 && blue(vegetal.color) >= 130) continue;
-			if(green(this.color) < 140 && green(vegetal.color) >= 130) continue;
+			if(blue(this.color) < 150 && blue(vegetal.color) >= 100) continue;
+			if(green(this.color) < 140 && green(vegetal.color) >= 100) continue;
             if(this.food <= this.sex && this.food <= this.thirst) vectorList.push(vec.normalize().mult(vegetal.attraction*random(1, 1.2)*green(this.color)/red(this.color) * (100 - this.food) / (1 + distance)));
             if (distance <= this.size) {
                 if (vegetal.size > 7)
@@ -166,7 +166,7 @@ class Creature {
         this.position = this.position.add(maxL);
         let change = int(green(this.color)) % 2 == 0
 		let count = 0;
-        while (blue(water.get(this.position.x, this.position.y)) > 100 && blue(this.color) < 150 && count < 50) {
+        while (blue(water.get(this.position.x, this.position.y)) > 100 && blue(this.color) < 100 && count < 50) {
             this.position = this.position.sub(maxL);
             let angle = createVector(1, 0).angleBetween(maxL)
             angle += change? 0.2 : -0.2;
@@ -176,7 +176,7 @@ class Creature {
         }
 		if(count == 50) this.health -= 0.1;
 		count = 0;
-        while (blue(water.get(this.position.x, this.position.y)) < 100 && green(this.color) < 140 && count < 50) {
+        while (blue(water.get(this.position.x, this.position.y)) < 100 && green(this.color) < 100 && count < 50) {
             this.position = this.position.sub(maxL);
             let angle = createVector(1, 0).angleBetween(maxL)
             angle += change? 0.2 : -0.2;
