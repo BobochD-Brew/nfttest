@@ -73,8 +73,8 @@ class Creature {
             if(canReproduce){
                 if(focusMode || (this.sex <= this.food && this.sex <= this.thirst)) vectorList.push(vec.normalize().mult(creature.attraction * (100 - this.sex) / (1 + distance)));
                 if (distance <= this.size) {
-                    this.maturity = this.age + 2;
-                    creature.maturity = creature.maturity + 2;
+                    this.maturity = this.age + 5;
+                    creature.maturity = creature.maturity + 5;
                     this.sex = 100;
                     creature.sex = 100;
                     this.health -= 1;
@@ -173,7 +173,7 @@ class Creature {
             this.position = this.position.add(maxL);
 			count++;
         }
-		if(count == 10) this.health -= 0.1;
+		if(count == 10) this.health -= 0.3;
 		count = 0;
         while (blue(water.get(this.position.x, this.position.y)) < 100 && (green(this.color) < 100 && red(this.color) < 150) && count < 50) {
             this.position = this.position.sub(maxL);
@@ -183,7 +183,7 @@ class Creature {
             this.position = this.position.add(maxL);
 			count++;
         }
-		if(count == 10) this.health -= 0.1;
+		if(count == 10) this.health -= 0.3;
 		count = 0;
         while (((this.position.x < 0) ||(this.position.x > width) || (this.position.y < 0) || (this.position.y > height) )&& count < 50) {
             this.position = this.position.sub(maxL);
