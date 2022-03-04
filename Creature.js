@@ -87,10 +87,10 @@ class Creature {
                         creatures[creatures.length - 1].sizecount = int((this.sizecount + creature.sizecount)/2);
 						if (random(0, 1) < 0.09){
 							let r,g,b;
-							r = random(0,250);
+							b = random(0,250);
 							g = random(0,(250-r*(2/3)))
 							let temp = max(r,g)
-							b = random(0,(250-temp*(2/3)))
+							r = random(0,(250-temp*(2/3)))
 							creatures[creatures.length - 1].color = color(r, g, b);
 							creatures[creatures.length - 1].sizecount = int(random(3,8));
 							if(random(0, 1) < 0.05) creatures[creatures.length - 1].size = random(5,25)
