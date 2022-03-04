@@ -17,8 +17,9 @@ class Vegetal {
         return (createVector(x, y).dist(this.position) <= this.size)
     }
     display(canva) {
+		this.color.setAlpha(180)
         canva.fill(this.color)
-        let size2 = 1 + this.maxsize - this.maxsize * exp(-this.size / 25)
+        let size2 = 1 + this.maxsize - this.maxsize * exp(-this.size / 65)
         canva.circle(this.position.x, this.position.y, this.size <= 0 ? this.size : size2);
     }
     update(vegetals,creatures,water) {

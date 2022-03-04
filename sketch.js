@@ -1,3 +1,4 @@
+ p5.disableFriendlyErrors = true;
 var backgroundLayer;
 var waterLayer;
 var vegetalLayer;
@@ -9,7 +10,7 @@ var creatures = [];
 var waterSpots = [];
 
 const noiseScale = 250;
-const vegetalsNum = 250;
+const vegetalsNum = 200;
 const creatureNum = 30;
 const qualitySize = 5;
 
@@ -23,21 +24,32 @@ var limit;
 var uplimit;
  let width;
  let height;
+let bofset;
 function generateGroundPos(){
-  let x = width*(1/10)+ width*(8/10)*random(0,1);
-  let y = height*(1/10)+ height*(8/10)*random(0,1);
-  while (noise(x / noiseScale, y / noiseScale, 0) <= limit) {
-      x = width*(1/10)+ width*(8/10)*random(0,1);
-      y = height*(1/10)+ height*(8/10)*random(0,1);
+  let x = width*(1/20)+ width*(19/20)*random(0,1);
+  let y = height*(1/20)+ height*(19/20)*random(0,1);
+  while (superNoise(x / noiseScale, y / noiseScale, 0) <= limit) {
+      x = width*(1/20)+ width*(19/20)*random(0,1);
+      y = height*(1/20)+ height*(19/20)*random(0,1);
   }
   return createVector(x,y)
 }
+
 function generateSeed() {
     limit = random(0.25, 0.45)
     uplimit = random(0.5, 1)
-    waterColor = color(random(20, 50), random(20, 50), random(150, 230), 250)
-    waterColor2 = color(0);//lerpColor(waterColor, color(0), 0.5)
-    let L = [
+	let L = [
+        color(random(20, 50), random(20, 50), random(150, 230), 250),
+        color(random(70, 120), random(210, 250), random(190, 240))
+    ]
+    waterColor = L[int(random(0, 2))];
+	L = [
+        color(random(20, 50), random(20, 50), random(150, 230), 250),
+        color(random(10, 40), random(10, 40), random(150, 170))
+    ]
+    waterColor2 = L[int(random(0, 2))];//lerpColor(waterColor, color(0), 0.5)
+	bofset = random(0,0.5);
+    L = [
         color(random(200, 250), random(200, 250), random(50, 100)),
         color(random(70, 120), random(200, 250), random(70, 120)),
 		color(random(190, 240), random(100, 150), random(40, 70))
@@ -81,34 +93,34 @@ function setup() {
   
     setLayers()
 }
-
+function superNoise(x,y,z){
+	a = noise(x, y, z)
+	b = noise(x*7, y*7, z)
+	c = noise(x*4, y*4, z)*0.1 - 0.1
+	return(Math.min(a,b+bofset)+c)
+}
 function setLayers() {
     backgroundLayer.background(groundColor);
     backgroundLayer.strokeWeight(0);
     waterLayer.strokeWeight(0);
-    creatureLayer.strokeWeight(1);
+    creatureLayer.strokeWeight(0.5);
 	creatureLayer.stroke(0);
     vegetalLayer.strokeWeight(0);
     ui.textSize(10)
     for (let i = 0; i < width; i+=1) {
         for (let j = 0; j < height; j+=1) {
-            if (noise(i / noiseScale, j / noiseScale, 0) <= limit) {
+            if (superNoise(i / noiseScale, j / noiseScale, 0) <= limit) {
 				waterLayer.fill(lerpColor(waterColor2,waterColor,noise(i / noiseScale, j / noiseScale, 0)/limit));//*(3/limit)-(limit * 2 / 3)));
                 
                 waterLayer.circle(i, j, 1)
-                if(i % qualitySize == 0 && j % qualitySize == 0) /*if ((noise((i + 1) / noiseScale, j / noiseScale, 0) > limit) ||
-                    (noise(i / noiseScale, (j + 1) / noiseScale, 0) > limit) ||
-                    (noise((i - 1) / noiseScale, j / noiseScale, 0) > limit) ||
-                    (noise(i / noiseScale, (j - 1) / noiseScale, 0) > limit)
-                )*/
-                    waterSpots.push(createVector(i, j))
-            } else if (noise(i / noiseScale, j / noiseScale, 0) <= limit + 0.01) {
+                if(i % qualitySize == 0 && j % qualitySize == 0) waterSpots.push(createVector(i, j))
+            } else if (superNoise(i / noiseScale, j / noiseScale, 0) <= limit + 0.01) {
                 backgroundLayer.fill(lerpColor(groundColor, waterColor, 0.5));
                 backgroundLayer.circle(i, j, 1)
-            }else if (noise(i / noiseScale, j / noiseScale, 0) <=  limit + (1 -limit)/3 ) {
+            }else if (superNoise(i / noiseScale, j / noiseScale, 0) <=  limit + (1 -limit)/3 ) {
                 backgroundLayer.fill(groundColor);
                 backgroundLayer.circle(i, j, 1)
-            }else if (noise(i / noiseScale, j / noiseScale, 0) <=  limit + (1 -limit)*2/3 ) {
+            }else if (superNoise(i / noiseScale, j / noiseScale, 0) <=  limit + (1 -limit)*2/3 ) {
                 backgroundLayer.fill(lerpColor(groundColor,groundColor2,0.5));
                 backgroundLayer.circle(i, j, 1)
             } else {
@@ -167,25 +179,25 @@ function drawUI() {
 		let r = 40;
 		ui.fill(color(0,0));
         ui.beginShape();
-        ui.vertex(cx+cos(TWO_PI/3 - PI/6)*r,cy-sin(TWO_PI/3 - PI/6)*r);
-        ui.vertex(cx+cos(TWO_PI*2/3 - PI/6)*r,cy-sin(TWO_PI*2/3 - PI/6)*r);
-        ui.vertex(cx+cos(TWO_PI*3/3 - PI/6)*r,cy-sin(TWO_PI*3/3 - PI/6)*r);
+        ui.vertex(cx+Math.cos(TWO_PI/3 - PI/6)*r,cy-Math.sin(TWO_PI/3 - PI/6)*r);
+        ui.vertex(cx+Math.cos(TWO_PI*2/3 - PI/6)*r,cy-Math.sin(TWO_PI*2/3 - PI/6)*r);
+        ui.vertex(cx+Math.cos(TWO_PI*3/3 - PI/6)*r,cy-Math.sin(TWO_PI*3/3 - PI/6)*r);
         ui.endShape(CLOSE);
 		ui.circle(cx,cy,r*2);
         ui.beginShape();
-        ui.vertex(cx+cos(TWO_PI/3 - PI/6)*r*(red(selected.color)/250),cy-sin(TWO_PI/3 - PI/6)*r*(red(selected.color)/250));
-        ui.vertex(cx+cos(TWO_PI*2/3 - PI/6)*r*(green(selected.color)/250),cy-sin(TWO_PI*2/3 - PI/6)*r*(green(selected.color)/250));
-        ui.vertex(cx+cos(TWO_PI*3/3 - PI/6)*r*(blue(selected.color)/250),cy-sin(TWO_PI*3/3 - PI/6)*r*(blue(selected.color)/250));
+        ui.vertex(cx+Math.cos(TWO_PI/3 - PI/6)*r*(red(selected.color)/250),cy-Math.sin(TWO_PI/3 - PI/6)*r*(red(selected.color)/250));
+        ui.vertex(cx+Math.cos(TWO_PI*2/3 - PI/6)*r*(green(selected.color)/250),cy-Math.sin(TWO_PI*2/3 - PI/6)*r*(green(selected.color)/250));
+        ui.vertex(cx+Math.cos(TWO_PI*3/3 - PI/6)*r*(blue(selected.color)/250),cy-Math.sin(TWO_PI*3/3 - PI/6)*r*(blue(selected.color)/250));
         ui.endShape(CLOSE);
 		ui.stroke(color('red'))
 		ui.fill(color('red'))
-		ui.line(cx,cy,cx+cos(TWO_PI/3 - PI/6)*r,cy-sin(TWO_PI/3 - PI/6)*r);
+		ui.line(cx,cy,cx+Math.cos(TWO_PI/3 - PI/6)*r,cy-Math.sin(TWO_PI/3 - PI/6)*r);
 		ui.stroke(color('green'))
 		ui.fill(color('green'))
-		ui.line(cx,cy,cx+cos(TWO_PI*2/3 - PI/6)*r,cy-sin(TWO_PI*2/3 - PI/6)*r);
+		ui.line(cx,cy,cx+Math.cos(TWO_PI*2/3 - PI/6)*r,cy-Math.sin(TWO_PI*2/3 - PI/6)*r);
 		ui.stroke(color('blue'))
 		ui.fill(color('blue'))
-		ui.line(cx,cy,cx+cos(TWO_PI*3/3 - PI/6)*r,cy-sin(TWO_PI*3/3 - PI/6)*r);
+		ui.line(cx,cy,cx+Math.cos(TWO_PI*3/3 - PI/6)*r,cy-Math.sin(TWO_PI*3/3 - PI/6)*r);
 		ui.stroke(color(0));
 		ui.fill(color(0));
 		ui.circle(cx,cy,3);
