@@ -75,7 +75,7 @@ class Vegetal {
 		if(!(this.daron == null || this.daron == NaN || this.daron == undefined)){
 			distst = this.position.dist(this.daron.position);
 			if (this.daron.size < this.daron.maxsize) this.daron.size += this.addition / (distst < 1 ? 1 : distst);
-			if(random(0,1) < ((blue(water.get(this.position.x, this.position.y)) > 100) ? (vegetals.length < 200 ? 0.05 : 0.01) : 0.001)){
+			if(random(0,1) < ((blue(water.get(this.position.x, this.position.y)) > 100) ? (vegetals.length < 200 ? 0.01 : 0.005) : 0.0005)){
 				let x = this.position.x + random(-this.range, this.range);
 				let y = this.position.y + random(-this.range, this.range);
 				vegetals.push(new Vegetal(x, y, random(2, 4)))
