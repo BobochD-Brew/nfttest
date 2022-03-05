@@ -74,7 +74,7 @@ class Creature {
                 if(focusMode || (this.sex <= this.food && this.sex <= this.thirst)) vectorList.push(vec.normalize().mult(creature.attraction * (100 - this.sex) / (1 + distance)));
                 if (distance <= this.size) {
                     this.maturity = this.age + 5;
-                    creature.maturity = creature.maturity + 5;
+                    creature.maturity = creature.age + 5;
                     this.sex = 100;
                     creature.sex = 100;
                     this.health -= 1;
