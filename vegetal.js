@@ -26,7 +26,7 @@ class Vegetal {
         this.age += 0.01
         let maxS = 0;
         this.size = this.size <= 0 ? 0 : (this.size - this.degradation);
-        if (this.age < 2) {this.size += 0.03;return;}
+        if (this.age < 2) {this.size += 0.1;return;}
         let maxV = null;
         let distst = 0;
         let c = 0
@@ -75,7 +75,7 @@ class Vegetal {
 		if(!(this.daron == null || this.daron == NaN || this.daron == undefined)){
 			distst = this.position.dist(this.daron.position);
 			if (this.daron.size < this.daron.maxsize) this.daron.size += this.addition / (distst < 1 ? 1 : distst);
-			if(random(0,1) < ((blue(water.get(this.position.x, this.position.y)) > 100) ? (vegetals.length < 200 ? 0.05 : 0.001) : 0.0002)){
+			if(random(0,1) < ((blue(water.get(this.position.x, this.position.y)) > 100) ? (vegetals.length < 200 ? 0.05 : 0.01) : 0.001)){
 				let x = this.position.x + random(-this.range, this.range);
 				let y = this.position.y + random(-this.range, this.range);
 				vegetals.push(new Vegetal(x, y, random(2, 4)))
