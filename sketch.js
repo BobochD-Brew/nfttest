@@ -25,6 +25,8 @@ var uplimit;
  let width;
  let height;
 let bofset;
+var drawing = false;
+var startFrame = 200;
 function generateGroundPos(){
   let x = width*(1/20)+ width*(19/20)*random(0,1);
   let y = height*(1/20)+ height*(19/20)*random(0,1);
@@ -76,24 +78,42 @@ function generateSeed() {
 function setup() {
     let params = getURLParams();
     seed = params.id;
-	width = windowWidth;
-	height = windowHeight;
+	startFrame = params.start;
+	width = 600;
+	height = 600;
     randomSeed(seed);
     noiseSeed(seed);
     generateSeed();
 
-    createCanvas(width, windowHeight);
+    createCanvas(windowWidth, windowHeight);
     backgroundLayer = createGraphics(width, height);
+		width = 600;
+	height = 600;
     waterLayer = createGraphics(width, height);
+		width = 600;
+	height = 600;
     vegetalLayer = createGraphics(width, height);
+		width = 600;
+	height = 600;
     creatureLayer = createGraphics(width, height);
-
+	width = 600;
+	height = 600;
     ui = createGraphics(width, windowHeight);
-    
+    	width = 600;
+	height = 600;
   
     setLayers()
+	drawing = false;
+	for(let i = 0; i < startFrame; i++){
+		frameCount++;
+		draw();
+	}
+	drawing = true;
+	
 }
 function superNoise(x,y,z){
+	x *= 600/width
+	y *= 600/height
 	a = noise(x, y, z)
 	b = noise(x*7, y*7, z)
 	c = noise(x*4, y*4, z)*0.1 - 0.1
@@ -132,14 +152,17 @@ function setLayers() {
 }
 
 function draw() {
-    image(backgroundLayer, 0, 0);
-    image(waterLayer, 0, 0);
-    updateVegetal();
-    image(vegetalLayer, 0, 0);
-    updateCreatures();
-    image(creatureLayer, 0, 0);
-    drawUI()
-    image(ui, 0, 0);
+	updateVegetal();
+	updateCreatures();
+	if(drawing){
+		//drawUI()
+		image(backgroundLayer, 0, 0,windowWidth,windowHeight);
+		image(waterLayer, 0, 0,windowWidth,windowHeight);
+		image(vegetalLayer, 0, 0,windowWidth,windowHeight);
+		image(creatureLayer, 0, 0,windowWidth,windowHeight); 
+		//image(ui, 0, 0,windowWidth,windowHeight);
+	}
+    
 }
 function twoDec(x){
 	return(floor(x*100)/100)
@@ -230,7 +253,7 @@ function updateCreatures() {
         creatures[i].update(creatures, vegetals, waterSpots, waterLayer)
         if (creatures[i].health <= 0) {
             creatures.splice(i, 1);
-        } else {
+        } else if(drawing){
             creatures[i].display(creatureLayer)
         }
     }
@@ -243,7 +266,7 @@ function updateVegetal() {
 		if(vegetals[i] == null) continue;
         if (vegetals[i].size <= 0) {
             vegetals.splice(i, 1);
-        } else {
+        } else if(drawing){
             vegetals[i].display(vegetalLayer)
         }
     }

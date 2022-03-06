@@ -9,7 +9,7 @@ class Vegetal {
         this.addition = 0.1;
         this.detectsize = 10;
         this.color = color(random(40, 70), random(130, 200), random(40, 70));
-        this.degradation = 0.01;
+        this.degradation = 0.04;
         this.maxsize = random(25, 45);
 		this.daron = null;
     }
@@ -30,7 +30,8 @@ class Vegetal {
         let maxV = null;
         let distst = 0;
         let c = 0
-		if((this.daron == null || this.daron == NaN || this.daron == undefined) && frameCount % 10 == 0){
+		let condition = (this.daron == null || this.daron == NaN || this.daron == undefined) || (this.position.dist(this.daron.position) == 0);
+		if(condition && frameCount % 10 == 0){
 			let random1 = random(0,1)
 			for (let i = 0; i < vegetals.length; i++) {
 				let vegetal = vegetals[i];
@@ -50,32 +51,33 @@ class Vegetal {
 				}
 			}
 			if( maxV == null  || maxV.position.dist(this.position) == 0){
-				if(this.size > 5 && random(0,1) < 0.05){
-					let x = this.position.x + random(-this.range, this.range);
-					let y = this.position.y + random(-this.range, this.range);
-					vegetals.push(new Vegetal(x, y, random(2, 4)))
-					if(blue(water.get(x, y)) > 100) vegetals[vegetals.length -1].color = color(random(40, 70), random(40, 70),random(130, 200));
-					vegetals[vegetals.length -1].daron = this;
-					if(random(0, 1) < 0.005){
-						creatures.push(new Creature(x, y, random(5,10)))
-						let r,g,b;
-						r = random(0,250);
-						g = random(0,(250-r*(2/3)))
-						let temp = max(r,g)
-						b = random(250-temp,(250-temp*(2/3)))
-						creatures[creatures.length - 1].color = color(r, g, b);
-						if(random(0, 1) < 0.05) creatures[creatures.length - 1].size = random(5,25)
-						creatures[creatures.length - 1].sizecount = int(random(3,8));
-					}
-				}
+				this.daron = this;
 			}else{
 				this.daron = maxV;
 			}
 		}
 		if(!(this.daron == null || this.daron == NaN || this.daron == undefined)){
 			distst = this.position.dist(this.daron.position);
-			if (this.daron.size < this.daron.maxsize) this.daron.size += this.addition / (distst < 1 ? 1 : distst);
-			if(random(0,1) < ((blue(water.get(this.position.x, this.position.y)) > 100) ? (vegetals.length < 200 ? 0.01 : 0.005) : 0.0005)){
+			if (this.daron.size < this.daron.maxsize && distst != 0) this.daron.size += this.addition / (distst < 1 ? 1 : distst);
+			let number = 0;
+			if(blue(water.get(this.position.x, this.position.y)) > 100){
+				if(vegetals.length < 200){
+					number = 0.00005
+				}else if(vegetals.length > 1500){
+					number = 0
+				}else{
+					number = 0.00005
+				}
+			}else{
+				if(vegetals.length < 200){
+					number = 0.0005
+				}else if(vegetals.length > 1500){
+					number = 0
+				}else{
+					number = 0.00005
+				}
+			}
+			if(random(0,1) < number){
 				let x = this.position.x + random(-this.range, this.range);
 				let y = this.position.y + random(-this.range, this.range);
 				vegetals.push(new Vegetal(x, y, random(2, 4)))
